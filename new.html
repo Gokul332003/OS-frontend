@@ -270,7 +270,7 @@
                     </ul>
                 </li>
                 <li>
-                    <a href="https://wa.me/+919942741593?text=Hello%20Team%20Rock" target="_blank">
+                    <a href="https://wa.me/+919488141593?text=Hello%20Team%20Rock" target="_blank">
                         <i class="fab fa-whatsapp"></i> Chat with us
                     </a>
                 </li>
@@ -404,24 +404,29 @@
     }
 
             // Create a JSON payload with the simulation settings
-            var settings = {
-                algorithm: algorithm,
-                frames: parseInt(frames),
-                page_references: pageReferences.split(",")
-            };
-
-            // Send an AJAX request to the backend API
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "/simulate", true);
-            xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4 && xhr.status === 200) {
-                    // On successful response, parse the JSON data and display the results
-                    var results = JSON.parse(xhr.responseText);
-                    displayResults(results);
-                }
-            };
-            xhr.send(JSON.stringify(settings));
+    var pageReferencesArray = pageReferences.split(/[, ]+/); // Split using both commas and spaces
+    var settings = {
+    algorithm: algorithm,
+    frames: parseInt(frames),
+    page_references: pageReferencesArray
+        };
+        // Send an AJAX request to the backend API
+        fetch('http://127.0.0.1:5000/simulate', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(settings)
+         })
+        .then(response => response.json())
+        .then(results => {
+        // Call a function to display the simulation results
+        displayResults(results);
+          })
+       .catch(error => {
+        // Handle any error that occurred during the request
+        console.error('Error:', error);
+          });
         }
 
         function displayResults(results) {
