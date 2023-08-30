@@ -319,6 +319,7 @@
     <br>
     <label for="pageReferences">Page References:</label>
     <input type="text" id="pageReferences" name="pageReferences" required><br>
+    <p>Enter the values separated by ","</p>
     <span id="pageReferencesError" class="error-message"></span>
 
     <!-- Add a button to trigger the simulation -->
@@ -329,7 +330,7 @@
     <footer class="footer">
         <!-- <p>Website made by Team Rock <span class="heart">&#10084;</span></p> -->
         <!-- <p>Total visitors: <span id="visitor-count" class="odometer">0</span></p> -->
-        <p>Content owned and updated by <span class="heart">&#10084;</span></p> |Copyright © |All Rights Reserved |Last Updated on : May 14, 2023, 6:37 p.m.| <span style="color: lightseagreen; font-weight: bold;" >Visitors Count:</span><span id="visitor-count" class="odometer">0</span></p>
+        <p>Content owned and updated by <span class="heart">&#10084;</span></p> |Copyright © |All Rights Reserved |Last Updated on : AUgust 30, 2023, 7:30 p.m.| <span style="color: lightseagreen; font-weight: bold;" >Visitors Count:</span><span id="visitor-count" class="odometer">0</span></p>
     </footer>
     
   <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
@@ -402,14 +403,25 @@
         pageReferencesError.textContent = "Page references cannot be empty";
         return;
     }
+          // Create a JSON payload with the simulation settings
+    var pageReferencesArray = pageReferences.split(',');
 
-            // Create a JSON payload with the simulation settings
-    var pageReferencesArray = pageReferences.split(/[, ]+/); // Split using both commas and spaces
+// Check for missing commas in pageReferences
+    if (pageReferencesArray.length === 1 && pageReferencesArray[0] === pageReferences) {
+    alert("Please use commas to separate page references.");
+    } else {
+    // Remove any leading or trailing whitespace from each value
+    pageReferencesArray = pageReferencesArray.map(function(value) {
+        return value.trim();
+    });
+
     var settings = {
-    algorithm: algorithm,
-    frames: parseInt(frames),
-    page_references: pageReferencesArray
-        };
+        algorithm: algorithm,
+        frames: parseInt(frames),
+        page_references: pageReferencesArray
+    };
+    // Use the 'settings' object as needed
+     }
         // Send an AJAX request to the backend API
         fetch('https://os-7y14.onrender.com/simulate', {
         method: 'POST',
