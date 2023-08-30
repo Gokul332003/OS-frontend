@@ -330,7 +330,7 @@
     <footer class="footer">
         <!-- <p>Website made by Team Rock <span class="heart">&#10084;</span></p> -->
         <!-- <p>Total visitors: <span id="visitor-count" class="odometer">0</span></p> -->
-        <p>Content owned and updated by <span class="heart">&#10084;</span></p> |Copyright © |All Rights Reserved |Last Updated on : AUgust 30, 2023, 7:30 p.m.| <span style="color: lightseagreen; font-weight: bold;" >Visitors Count:</span><span id="visitor-count" class="odometer">0</span></p>
+        <p>Content owned and updated by <span class="heart">&#10084;</span></p> |Copyright © |All Rights Reserved |Last Updated on : August 30, 2023, 8:00 p.m.| <span style="color: lightseagreen; font-weight: bold;" >Visitors Count:</span><span id="visitor-count" class="odometer">0</span></p>
     </footer>
     
   <script src="https://cdnjs.cloudflare.com/ajax/libs/odometer.js/0.4.8/odometer.min.js"></script>
@@ -397,16 +397,21 @@
         framesError.textContent = "Invalid frames input";
         return;
     }
-
     // Validate the page references input
     if (pageReferences === "") {
         pageReferencesError.textContent = "Page references cannot be empty";
         return;
     }
-          // Create a JSON payload with the simulation settings
+    // Check for non-numeric values and invalid separators
     var pageReferencesArray = pageReferences.split(',');
-
-// Check for missing commas in pageReferences
+    for (var i = 0; i < pageReferencesArray.length; i++) {
+    var value = pageReferencesArray[i].trim();
+    if (!/^\d+$/.test(value)) {
+        alert("Please enter only numeric values for page references.");
+        return;
+    }
+}
+    // Check for missing commas in pageReferences
     if (pageReferencesArray.length === 1 && pageReferencesArray[0] === pageReferences) {
     alert("Please use commas to separate page references.");
     } else {
@@ -455,15 +460,31 @@
                 errorText.textContent = "Error: " + results.error;
                 resultsDiv.appendChild(errorText);
             } else {
-                // Display the page faults
-                var pageFaultsText = document.createElement("p");
-                pageFaultsText.textContent = "Page Faults: " + results.page_faults;
-                resultsDiv.appendChild(pageFaultsText);
+                        // Display the page faults
+var pageFaultsText = document.createElement("p");
+pageFaultsText.innerHTML = "<span id='pageFaultsLabel' style='font-size: 1.2em; display: inline-block;'>Page Faults</span>: <span id='pageFaultsValue' style='font-size: 1.2em; display: inline-block;'>" + results.page_faults + "</span>";
+resultsDiv.appendChild(pageFaultsText);
 
-                // Display the page frames
-                var pageFramesText = document.createElement("p");
-                pageFramesText.textContent = "Page Frames: " + results.page_frames.join(", ");
-                resultsDiv.appendChild(pageFramesText);
+// Apply CSS to make the label and value blink
+var pageFaultsLabel = document.getElementById("pageFaultsLabel");
+var pageFaultsValue = document.getElementById("pageFaultsValue");
+
+var blinkInterval = setInterval(function() {
+    pageFaultsLabel.style.fontWeight = pageFaultsLabel.style.fontWeight === "bold" ? "normal" : "bold";
+    pageFaultsValue.style.fontWeight = pageFaultsValue.style.fontWeight === "bold" ? "normal" : "bold";
+}, 500); // Change the interval duration as needed (e.g., 500ms)
+
+// Stop blinking after a certain time (e.g., 5 seconds)
+setTimeout(function() {
+    clearInterval(blinkInterval);
+    pageFaultsLabel.style.fontWeight = "bold"; // Ensure it's bold after blinking
+    pageFaultsValue.style.fontWeight = "bold"; // Ensure it's bold after blinking
+}, 5000); // Change the duration as needed (e.g., 5000ms)
+
+                //  Display the page frames
+                // var pageFramesText = document.createElement("p");
+                // pageFramesText.textContent = "Page Frames: " + results.page_frames.join(", ");
+                // resultsDiv.appendChild(pageFramesText);
             }
         }
     </script>
